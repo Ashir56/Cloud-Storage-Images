@@ -11,7 +11,6 @@ def write_file(data, filename):
     with open(filename, 'w') as file:
         file.write(data)
 
-
 conn = psycopg2.connect(
     database="kona-db", user="postgres",
     password="incloud@2019", host="35.243.83.15")

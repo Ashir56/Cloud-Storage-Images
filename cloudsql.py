@@ -11,27 +11,34 @@ def write_file(data, filename):
     with open(filename, 'w') as file:
         file.write(data)
 
+# conn = psycopg2.connect(
+#     database="kona-production", user="postgres",
+#     password="incloud@2019", host="35.188.112.148")
+
 conn = psycopg2.connect(
     database="kona-db", user="postgres",
     password="incloud@2019", host="35.243.83.15")
 
 client = storage.Client()
+# bucket = client.get_bucket('kona-2c5bc.appspot.com')
 bucket = client.get_bucket('kona-staging.appspot.com')
 db = conn.cursor()
-db.execute("SELECT file from space_images WHERE file IS NOT NULL and file <> '';")
+db.execute("SELECT avatar from users WHERE avatar IS NOT NULL and avatar <> '';")
 records = db.fetchall()
+
 i = 0
 sizes = []
 for record in records:
     if record is not None:
+        print(record)
         i += 1
         image = record[0]
-        print(image)
+        # print(image)
         if ('.jpg' in image or '.png' in image) or ('.JPEG' in image or '.PNG' in image):
             blob = bucket.get_blob(image)
             content = blob.download_as_string()
             sizes.append((content.__sizeof__() /1024)/1024)
-            print(sizes)
+            # print(sizes)
         # bytes = io.BytesIO(content)
         # im = Image.open(bytes)
         #
